@@ -1,10 +1,16 @@
 import type { TimerMode } from '../types'
 
 interface ProgressRingProps {
-  progress: number       // 0-1，已消耗比例
-  mode: TimerMode        // 决定颜色
-  size?: number          // 默认 280
-  strokeWidth?: number   // 默认 8
+  progress: number
+  mode: TimerMode
+  size?: number
+  strokeWidth?: number
+}
+
+const modeColors: Record<TimerMode, string> = {
+  work: '#ef4444',
+  break: '#3b82f6',
+  longBreak: '#8b5cf6',
 }
 
 export function ProgressRing({
@@ -18,7 +24,7 @@ export function ProgressRing({
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference * (1 - progress)
 
-  const color = mode === 'work' ? '#ef4444' : '#3b82f6'
+  const color = modeColors[mode]
   const bgColor = '#334155'
 
   return (
@@ -28,7 +34,6 @@ export function ProgressRing({
       viewBox={`0 0 ${size} ${size}`}
       className="drop-shadow-lg"
     >
-      {/* 背景环 */}
       <circle
         cx={center}
         cy={center}
@@ -37,7 +42,6 @@ export function ProgressRing({
         stroke={bgColor}
         strokeWidth={strokeWidth}
       />
-      {/* 前景弧 */}
       <circle
         cx={center}
         cy={center}

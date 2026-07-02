@@ -14,6 +14,7 @@ describe('ControlButtons', () => {
         onStart={vi.fn()}
         onPause={vi.fn()}
         onReset={vi.fn()}
+        lang="zh"
       />
     )
     expect(screen.getByText('开始')).toBeInTheDocument()
@@ -28,6 +29,7 @@ describe('ControlButtons', () => {
         onStart={vi.fn()}
         onPause={vi.fn()}
         onReset={vi.fn()}
+        lang="zh"
       />
     )
     expect(screen.getByText('暂停')).toBeInTheDocument()
@@ -43,6 +45,7 @@ describe('ControlButtons', () => {
         onStart={onStart}
         onPause={vi.fn()}
         onReset={vi.fn()}
+        lang="zh"
       />
     )
     await userEvent.click(screen.getByText('开始'))
@@ -57,6 +60,7 @@ describe('ControlButtons', () => {
         onStart={vi.fn()}
         onPause={onPause}
         onReset={vi.fn()}
+        lang="zh"
       />
     )
     await userEvent.click(screen.getByText('暂停'))
@@ -71,9 +75,24 @@ describe('ControlButtons', () => {
         onStart={vi.fn()}
         onPause={vi.fn()}
         onReset={onReset}
+        lang="zh"
       />
     )
     await userEvent.click(screen.getByText('重置'))
     expect(onReset).toHaveBeenCalledTimes(1)
+  })
+
+  it('英文模式显示对应按钮文本', () => {
+    render(
+      <ControlButtons
+        isRunning={false}
+        onStart={vi.fn()}
+        onPause={vi.fn()}
+        onReset={vi.fn()}
+        lang="en"
+      />
+    )
+    expect(screen.getByText('Start')).toBeInTheDocument()
+    expect(screen.getByText('Reset')).toBeInTheDocument()
   })
 })

@@ -1,8 +1,12 @@
+import type { Lang } from '../types'
+import { t } from '../i18n'
+
 interface ControlButtonsProps {
   isRunning: boolean
   onStart: () => void
   onPause: () => void
   onReset: () => void
+  lang: Lang
 }
 
 const buttonBase =
@@ -10,7 +14,7 @@ const buttonBase =
   'focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none ' +
   'active:scale-[0.97]'
 
-export function ControlButtons({ isRunning, onStart, onPause, onReset }: ControlButtonsProps) {
+export function ControlButtons({ isRunning, onStart, onPause, onReset, lang }: ControlButtonsProps) {
   return (
     <div className="flex gap-4">
       {isRunning ? (
@@ -18,21 +22,21 @@ export function ControlButtons({ isRunning, onStart, onPause, onReset }: Control
           onClick={onPause}
           className={`${buttonBase} bg-amber-500 text-white hover:brightness-90`}
         >
-          暂停
+          {t('btn.pause', lang)}
         </button>
       ) : (
         <button
           onClick={onStart}
           className={`${buttonBase} bg-green-500 text-white hover:brightness-90`}
         >
-          开始
+          {t('btn.start', lang)}
         </button>
       )}
       <button
         onClick={onReset}
         className={`${buttonBase} bg-slate-500 text-white hover:brightness-90`}
       >
-        重置
+        {t('btn.reset', lang)}
       </button>
     </div>
   )

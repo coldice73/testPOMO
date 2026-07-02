@@ -1,17 +1,23 @@
-import type { TimerMode } from '../types'
+import type { TimerMode, Lang } from '../types'
 import { ProgressRing } from './ProgressRing'
 import { formatTime } from '../utils'
+import { t } from '../i18n'
 
 interface TimerDisplayProps {
   timeLeft: number
   mode: TimerMode
   progress: number
   totalTime: number
+  lang: Lang
 }
 
-export function TimerDisplay({ timeLeft, mode, progress, totalTime }: TimerDisplayProps) {
-  const modeLabel = mode === 'work' ? '🍅 工作时间' : '☕ 休息时间'
+const modeLabelKey: Record<TimerMode, string> = {
+  work: 'mode.work',
+  break: 'mode.break',
+  longBreak: 'mode.longBreak',
+}
 
+export function TimerDisplay({ timeLeft, mode, progress, totalTime, lang }: TimerDisplayProps) {
   return (
     <div className="relative inline-flex items-center justify-center">
       <ProgressRing progress={progress} mode={mode} size={280} />
@@ -20,7 +26,7 @@ export function TimerDisplay({ timeLeft, mode, progress, totalTime }: TimerDispl
           {formatTime(timeLeft)}
         </span>
         <span className="text-xl font-medium text-slate-400 mt-4">
-          {modeLabel}
+          {t(modeLabelKey[mode], lang)}
         </span>
       </div>
     </div>

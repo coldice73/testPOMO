@@ -8,44 +8,58 @@ describe('TimerDisplay', () => {
   })
   it('显示格式化时间 25:00', () => {
     render(
-      <TimerDisplay timeLeft={1500} mode="work" progress={0} totalTime={1500} />
+      <TimerDisplay timeLeft={1500} mode="work" progress={0} totalTime={1500} lang="zh" />
     )
     expect(screen.getByText('25:00')).toBeInTheDocument()
   })
 
   it('显示格式化时间 05:00', () => {
     render(
-      <TimerDisplay timeLeft={300} mode="break" progress={0} totalTime={300} />
+      <TimerDisplay timeLeft={300} mode="break" progress={0} totalTime={300} lang="zh" />
     )
     expect(screen.getByText('05:00')).toBeInTheDocument()
   })
 
   it('显示 00:00', () => {
     render(
-      <TimerDisplay timeLeft={0} mode="work" progress={1} totalTime={1500} />
+      <TimerDisplay timeLeft={0} mode="work" progress={1} totalTime={1500} lang="zh" />
     )
     expect(screen.getByText('00:00')).toBeInTheDocument()
   })
 
   it('工作模式显示 🍅 工作时间', () => {
     render(
-      <TimerDisplay timeLeft={1500} mode="work" progress={0} totalTime={1500} />
+      <TimerDisplay timeLeft={1500} mode="work" progress={0} totalTime={1500} lang="zh" />
     )
     expect(screen.getByText('🍅 工作时间')).toBeInTheDocument()
   })
 
   it('休息模式显示 ☕ 休息时间', () => {
     render(
-      <TimerDisplay timeLeft={300} mode="break" progress={0} totalTime={300} />
+      <TimerDisplay timeLeft={300} mode="break" progress={0} totalTime={300} lang="zh" />
     )
     expect(screen.getByText('☕ 休息时间')).toBeInTheDocument()
   })
 
+  it('长休息模式显示 🍵 长休息', () => {
+    render(
+      <TimerDisplay timeLeft={900} mode="longBreak" progress={0} totalTime={900} lang="zh" />
+    )
+    expect(screen.getByText('🍵 长休息')).toBeInTheDocument()
+  })
+
   it('渲染进度环 SVG', () => {
     const { container } = render(
-      <TimerDisplay timeLeft={1500} mode="work" progress={0.5} totalTime={1500} />
+      <TimerDisplay timeLeft={1500} mode="work" progress={0.5} totalTime={1500} lang="zh" />
     )
     const svg = container.querySelector('svg')
     expect(svg).toBeInTheDocument()
+  })
+
+  it('英文模式显示对应文本', () => {
+    render(
+      <TimerDisplay timeLeft={1500} mode="work" progress={0} totalTime={1500} lang="en" />
+    )
+    expect(screen.getByText('🍅 Focus Time')).toBeInTheDocument()
   })
 })
