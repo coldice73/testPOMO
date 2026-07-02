@@ -8,7 +8,6 @@ export function useTimer(): UseTimerReturn {
   const [mode, setMode] = useState<TimerMode>('work')
   const [timeLeft, setTimeLeft] = useState(WORK_DURATION)
   const [isRunning, setRunning] = useState(false)
-  const lastTickRef = useRef<number | null>(null)
   const modeRef = useRef<TimerMode>('work')
 
   // 保持 modeRef 与 state 同步
@@ -26,29 +25,17 @@ export function useTimer(): UseTimerReturn {
 
   // 核心计时逻辑
   useEffect(() => {
-    if (!isRunning) {
-      lastTickRef.current = null
-      return
-    }
+    if (!isRunning) return
 
-    // 将基准时间戳回拨 800ms，让第一次 tick 大约 1 秒后触发
-    lastTickRef.current = Date.now() - 800
     const id = setInterval(() => {
-      const now = Date.now()
-      const elapsed = Math.floor((now - (lastTickRef.current ?? now)) / 1000)
-      if (elapsed >= 1) {
-        lastTickRef.current = now  // 重置基准时间戳
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            // 先返回 0，显示 00:00 一帧
-            if (prev === 1) return 0
-            // 已经是 0 → 不做任何事，由下面的 useEffect 检测并切换
-            return 0
-          }
-          return prev - elapsed  // 扣除实际经过的秒数
-        })
-      }
-    }, 1000)  // 1 秒精度，Date.now() 时间差策略保证准确
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          if (prev === 1) return 0
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
 
     return () => clearInterval(id)  // cleanup: 组件卸载时清理
   }, [isRunning])
@@ -71,7 +58,6 @@ export function useTimer(): UseTimerReturn {
       return prev
     })
     setRunning(true)
-    lastTickRef.current = Date.now()
   }, [isRunning, getModeDuration])
 
   const pause = useCallback(() => {
