@@ -60,27 +60,31 @@ export function useTimer(): UseTimerReturn {
     }
   }, [isRunning, timeLeft, switchMode])
 
+  const getModeDuration = useCallback((): number => {
+    return modeRef.current === 'work' ? WORK_DURATION : BREAK_DURATION
+  }, [])
+
   const start = useCallback(() => {
     if (isRunning) return  // 幂等守卫: 防止快速双击或已运行时重复启动
     setTimeLeft(prev => {
-      if (prev <= 0) return currentModeDuration()  // 倒计时已结束则重置
+      if (prev <= 0) return getModeDuration()  // 倒计时已结束则重置
       return prev
     })
     setRunning(true)
     lastTickRef.current = Date.now()
-  }, [isRunning, currentModeDuration])
+  }, [isRunning, getModeDuration])
 
   const pause = useCallback(() => {
     setRunning(false)
   }, [])
 
   const reset = useCallback(() => {
-    setTimeLeft(currentModeDuration())
+    setTimeLeft(getModeDuration())
     setRunning(false)
-  }, [currentModeDuration])
+  }, [getModeDuration])
 
   // 派生值
-  const totalTime = currentModeDuration()
+  const totalTime = getModeDuration()
   const progress = 1 - (timeLeft / totalTime)
 
   return {
